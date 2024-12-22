@@ -4,6 +4,6 @@
   }else {
     $page = "home";
   }
-  $file = "includes/" . $page ."php";
+  $file = "includes/" . $page .".php";
   assert("strpos('$file', '..') === false") or die("ERROR: hacking attempt!");
 ?>
