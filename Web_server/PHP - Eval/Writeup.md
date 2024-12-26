@@ -1,8 +1,9 @@
 # PHP - Eval
 
+- Trong bài này có 1 hàm cho nhập các phép toán để tính toán và trả ra kết quả
 ![alt text](image-1.png)
 
-- Code:
+- Phân tích đoạn code được cung cấp => đoạn code dùng hàm eval() để in ra kết quả tính toán những gì người dùng nhập vào. Input người dùng nhập vào đã bị chặn các chữ cái a-zA-Z => chỉ nhập được số và các kí tự đặc biệt => suy nghĩ đến PHP fuck xor các kí tự đặc biệt để tạo ra các chữ cái. Ở đây chúng ta sẽ dùng cộng chuỗi để tạo ra payload system("cat .passwd");
 
 ```php
 <html>
@@ -33,7 +34,7 @@ if (isset($_POST['input'])) {
 ```
 
 - mục tiêu là đọc flag trong .passwd => dùng câu lệnh `cat .passwd`. Nhưng trong đoạn code này chặn các chữ cái => cần phải có biện pháp obfuscate để có thể đọc flag mà không cần phải dùng đến các kí tự chữ cái
-- tạo 1 webshell obfuscate với dạng sau không chứa chữ với dạng sau: 
+- tạo 1 webshell `(cat .passwd)` obfuscate với dạng sau không chứa chữ với dạng sau: 
 
 ```php
 <?php 
