@@ -42,4 +42,11 @@ $___($_);
 
 - Tạo ra webshell bằng cách cộng kí tự và tạo ra chuỗi
 - Giải thích cơ chế: 
+    1, Tận dụng chuỗi ký tự ASCII:
+      - Biến $__ bắt đầu với giá trị ASCII của ký tự đầu tiên ($_[3]) của chuỗi rỗng, sau đó được tăng dần bằng toán tử tăng ++ để đạt được các ký tự mong muốn (s, y, s, t, e, m và l, s).
+    2, Ghép nối chuỗi để tạo hàm và tham số:
+      - Biến $___ được xây dựng bằng cách ghép nối các ký tự để tạo thành hàm system.
+      - Biến $____ được ghép nối các ký tự để tạo ra tham số ls.
+    3, Gọi hàm:
+      - Cuối cùng, $___($_) gọi hàm system với tham số là chuỗi ls, thực thi lệnh ls trên hệ thống.
 - Tài liệu tham khảo: [https://securityonline.info/bypass-waf-php-webshell-without-numbers-letters/](https://securityonline.info/bypass-waf-php-webshell-without-numbers-letters/)
