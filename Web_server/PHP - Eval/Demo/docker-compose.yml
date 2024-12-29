@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  php-apache:
+    build: .
+    ports:
+      - "8080:80" # Map cổng 8080 trên máy host sang cổng 80 của container
+    volumes:
+      - ./index.php:/var/www/html/index.php
