@@ -125,3 +125,14 @@ $__________ = $____." ".$______ ;
 $___($_____($__________ ))
 ?>
 ```
+
+## Hàm Eval()
+
+- Với hàm eval, khi chúng ta truyền vào base64_decode("c3lzdGVtKCJscyIp") (system("ls")) thì nó sẽ chỉ thực thi hàm base64_decode để giải mã, sau đó nó sẽ chỉ in ra system("ls"), không thực thi  câu lệnh này
+- Vói hàm eval, nó sẽ chỉ thực thi nội dung trực tiếp được truyền vào, và nội dung đó phải là đoạn mã PHP hợp lệ
+- Nếu nội dung đó chỉ là một chuỗi (kết quả từ base64_decode), nó sẽ không tự động được eval tiếp tục xử lý.
+- Ví dụ:
+      - nhập trực tiếp system("ls") => eval thực thi nó ngay lập tức.
+      -   nhập base64_decode("...")
+        - Chuỗi này chỉ là một đoạn mã gọi hàm base64_decode. Kết quả của nó là chuỗi ký tự system("ls"), nhưng nó không được xem là mã PHP sẵn sàng thực thi.
+        - eval không có khả năng thực thi lại chuỗi được trả về từ một hàm như  base64_decode.
